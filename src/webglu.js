@@ -111,12 +111,12 @@ $W = {
      */
     GLSL: {
         shaderVarLengths: {
-            int:1,
-            float:1,
-            bool:1,
-            vec2:2,
-            vec3:3,
-            vec4:4
+            'int'  :1,
+            'float':1,
+            'bool' :1,
+            'vec2' :2,
+            'vec3' :3,
+            'vec4' :4
         },
         util: {
             getShaderSourceById: function(id) {
@@ -175,7 +175,7 @@ $W = {
             this.buffer = null;
             this.clone = function() {
                 return new $W.GLSL.Attribute(this.name, this.length);
-            }
+            };
         },
 
         /** @class Holds data for shader uniform variables
@@ -192,7 +192,7 @@ $W = {
 
             this.clone = function() {
                 return new $W.GLSL.Uniform(this.name, this.action, this.type);
-            }
+            };
         },
 
         /** @class Handles compilation, attributes, and uniforms of a GLSL
@@ -255,22 +255,22 @@ $W = {
                     $W.programs[programs[i]].dirty();                            
                 }
                 isDirty = true;
-            }
+            };
 
             var clean = function() {
                 isDirty = false;
-            }
+            };
             this.isDirty = function() {
                 return isDirty;
-            }
+            };
 
 
             this.addProgram = function(name) {
                 programs.push(name);
-            }
+            };
             this.removeProgram = function(name) {
                 programs = programs.remove(name);
-            }
+            };
             
             /** Change the source for this shader 
              * @param {String} src The source code.
@@ -278,7 +278,7 @@ $W = {
             this.setSource = function(src) {
                 dirty();
                 source = src;
-            }
+            };
 
             /** Set up a Uniform for the modelview matrix.
              * Creates the appropriate action for sending the matrix
@@ -300,8 +300,8 @@ $W = {
                 uniform.action = function() {
                     $W.GL.uniformMatrix4fv(this.location, false, 
                             $W.modelview.getForUniform());
-                }
-            }
+                };
+            };
 
             /** Set up a Uniform for the projection matrix.
              * Creates the appropriate action for sending the matrix
@@ -321,8 +321,8 @@ $W = {
                 uniform.action = function() {
                     $W.GL.uniformMatrix4fv(this.location, false, 
                             $W.projection.getForUniform());
-                }
-            }
+                };
+            };
 
             /** Set up a Uniform for the normal matrix.
              * Creates the appropriate action for sending the matrix
@@ -342,8 +342,8 @@ $W = {
                 uniform.action = function() {
                     $W.GL.uniformMatrix3fv(this.location, false, 
                             $W.util.getNormalMatrixForUniform());
-                }
-            }
+                };
+            };
 
             /** @returns The raw WebGL shader object */
             this.getGLShader = function() {
@@ -359,7 +359,7 @@ $W = {
                     console.log("'" + this.name + "' is clean, using");
                 }
                 return glShader;
-            }
+            };
 
             /** Store the information about this named uniform. 
              * @param {String} name The uniform variable name as defined in
@@ -370,10 +370,10 @@ $W = {
             this.addUniform = function(name, action, type) {
                 console.log("adding uniform '" + name + "'");
                 if (!action) {
-                    action = function(){}
+                    action = function(){};
                 }
                 this.uniforms.push(new $W.GLSL.Uniform(name, action, type));
-            }
+            };
 
             /** Store the information about this named attribute. 
              * @param {String} name The attribute variable name as defined in
@@ -384,7 +384,7 @@ $W = {
                 console.log("adding attribute '" + name + "'");
                 if (!length) { length = 3; }
                 this.attributes.push(new $W.GLSL.Attribute(name, length));
-            }
+            };
 
             // Find and initialize all uniforms and attributes found in the source
             this.parseShaderVariables = function(str) {
@@ -414,7 +414,7 @@ $W = {
                         }
                     }
                 }
-            }
+            };
 
             /** Compile the shader if able.
              * Lets any shader programs which use this shader know they need to
@@ -450,7 +450,7 @@ $W = {
                 }
 
                 return (glShader !== null);
-            }
+            };
 
             this.parseShaderVariables(source);
             this.compile();
@@ -478,16 +478,16 @@ $W = {
             var dirty = function() {
                 this.glProgram = null;
                 isDirty = true;
-            }
+            };
             this.dirty = dirty;
 
             var clean = function() {
                 isDirty = false;
-            }
+            };
 
             this.isDirty = function() {
                 return isDirty;
-            }
+            };
             
             /** Attached shaders */
             this.shaders   = [];
@@ -515,10 +515,9 @@ $W = {
                         this.attributes.push(attribute);
                     }
                 }
-            }
+            };
 
             this._setupUniforms = function() {
-
 
                 // Each shader keeps track of its uniforms
                 for (var i = 0; i < this.shaders.length; i++) {
@@ -532,7 +531,7 @@ $W = {
                         this.uniforms.push(uniform);
                     }
                 }
-            }
+            };
 
             /** Set the action to take per fram for a particular uniform.
              * Here instead of the shader because different programs can both
@@ -562,7 +561,7 @@ $W = {
                 }
 
                 uniform.action = action;
-            }
+            };
 
             /** Set the named uniform variable to a single value.
              * Overloaded to allow 1-4 values to be passed. This allows 
@@ -598,42 +597,42 @@ $W = {
                     if (uniform.type === "int") {
                         uniform.action = function() {
                             $W.GL.uniform1i(this.location, val);
-                        }
+                        };
                     }else {
                         uniform.action = function() {
                             $W.GL.uniform1f(this.location, val);
-                        }
+                        };
                     }
 
                 } else if (arguments.length == 3) {
                     uniform.action = function() {
                         $W.GL.uniform2f(this.location, 
                             arguments[1], arguments[2]);
-                    }
+                    };
 
                 } else if (arguments.length == 4) {
                     uniform.action = function() {
                         $W.GL.uniform3f(this.location, 
                             arguments[1], arguments[2], 
                             arguments[3]);
-                    }
+                    };
 
                 } else if (arguments.length == 5) {
                     uniform.action = function() {
                         $W.GL.uniform4f(this.location, 
                             arguments[1], arguments[2], 
                             arguments[3], arguments[4]);
-                    }
+                    };
 
                 }
-            }
+            };
 
             /** Called once per frame to calculate and set uniforms. */
             this.processUniforms = function(obj) {
                 for (var i = 0; i < this.uniforms.length; i++) {
                     this.uniforms[i].action(obj);
                 }
-            }
+            };
 
             /** Link this shader program to make it useable.
              * Will [re]compile all attached shaders if necessary.
@@ -683,13 +682,13 @@ $W = {
 
                 console.groupEnd();
                 return isDirty;
-            }
+            };
 
             /** XXX @Deprecated */
             this.detachShaderByName = function(name) {
                 console.warn("detachShaderByName is deprecated, use detachShader instead");
                 this.detachShader(name);
-            }
+            };
 
             /** Remove the named shader from this program.
              * Can be used to alter a shader program on the fly.
@@ -706,7 +705,7 @@ $W = {
 
                 isDirty = true;
                 this.shaders = tempShaders;
-            }
+            };
 
             /** Attach a shader to this shader program.
              * Overloaded to work with as <br>
@@ -749,7 +748,7 @@ $W = {
                 }
 
                 this._attachShader(shader);
-            }
+            };
 
             this._attachShader = function(shader) {
                 console.log("attaching '" + shader.name + "' to '" + this.name + "'");
@@ -760,13 +759,13 @@ $W = {
                 }
                 isDirty = true;
                 this.shaders.push(shader.name);
-            }
+            };
 
             /** XXX @Deprecated */
             this.attachShaderByID = function(name) {
                 console.warn("attachShaderByID is deprecated, use attachShader instead");
                 this.attachShader(new $W.GLSL.Shader(name));
-            }
+            };
 
             /** Set this shader program to be the active program for
              * rendering.
@@ -778,7 +777,7 @@ $W = {
                 }
                 $W.GL.useProgram(this.glProgram);
                 return true;
-            }
+            };
 
             console.groupEnd();
         }
@@ -796,11 +795,11 @@ $W = {
 
         this.bind = function() {
             GL.bindFramebuffer(FBUF, this.glFramebuffer);
-        }
+        };
 
         this.unbind = function() {
             GL.bindFramebuffer(FBUF, null);
-        }
+        };
 
         this.attachRenderbuffer = function(storageFormat, width, height, attachment) {
             var rBuffer = GL.createRenderbuffer();
@@ -813,14 +812,14 @@ $W = {
 
             GL.framebufferRenderbuffer(FBUF, attachment, RBUF, rBuffer);
             this.unbind();
-        }
+        };
 
         this.attachExistingTexture = function(texture, attachment) {
             this.glTextures.push(texture.glTexture);
             this.bind();
             GL.framebufferTexture2D(FBUF, attachment, GL.TEXTURE_2D, texture.glTexture, 0);
             this.unbind();
-        }
+        };
 
         this.attachNewTexture = function(format, width, height, attachment) {
             var texture = new $W.texture.Texture('Texture' + $W.textures.length);
@@ -830,7 +829,7 @@ $W = {
             texture.unbind();
 
             this.attachExistingTexture(texture, attachment);
-        }
+        };
 
         this.attachTexture = function() {
             if (arguments.length === 4) {   
@@ -838,7 +837,7 @@ $W = {
             }else {
                 this.attachExistingTexture.apply(this, arguments);
             }
-        }
+        };
     },
 
     /** @namespace Contains (semi)constant values that generally shouldn't be 
@@ -1271,7 +1270,7 @@ $W = {
             if (!!gl) { console.log('using ' + type); }
 
             return gl;
-        },
+        }
 
     },
 
@@ -1312,45 +1311,45 @@ $W = {
 
                         this.postUpdate(dt);
                 });
-            }
+            };
 
             /** Internal.
              * @return {Function} Do nothing.
              */
             ptyp._pause = function() {
                 return (function() {});
-            }
+            };
 
             /** This animation will advance on subsequent update() 
              * calls.
              */
             this.play = function() {
                 this.update = ptyp._play();
-            }
+            };
 
             /** This animation will not change on subsequent update() 
              * calls.
              */
             this.pause = function() {
                 this.update = ptyp._pause();
-            }
+            };
 
             /** Called before `dt` is added to this.age 
              * Does nothing by default.
              */
-            this.preUpdate      = function(dt){}
+            this.preUpdate      = function(dt){};
 
             /** Update the position. Does nothing by default. */
-            this.updatePosition = function(dt){}
+            this.updatePosition = function(dt){};
             /** Update the rotation. Does nothing by default. */
-            this.updateRotation = function(dt){}
+            this.updateRotation = function(dt){};
             /** Update the scale. Does nothing by default. */
-            this.updateScale    = function(dt){}
+            this.updateScale    = function(dt){};
 
             /** Called after all other update calls.
              * Does nothing by default.
              */
-            this.postUpdate     = function(dt){}
+            this.postUpdate     = function(dt){};
 
             this.play();
         },
@@ -1424,7 +1423,7 @@ $W = {
                 this.scale.elements = $W.util.lerpTriple(t, 
                         this.keyframes[this.A].scale.elements,
                         this.keyframes[this.B].scale.elements);
-            }
+            };
 
             /** Add a new keyframe. 
              * For now it needs to be added in time order as it
@@ -1433,7 +1432,7 @@ $W = {
              */
             this.addKeyframe = function(keyframe) {
                 this.keyframes.push(keyframe);
-            }
+            };
 
             /** Remove the keyframe at index from the list of keyframes.
              * @param {Integer} index The index of the keyframe to remove.
@@ -1447,7 +1446,7 @@ $W = {
                         result.push(this.keyframes[i]);
                     }
                 }
-            }
+            };
         }
 
     },
@@ -1462,11 +1461,11 @@ $W = {
 
             this.bind = function() {
                 $W.GL.bindTexture($W.GL.TEXTURE_2D, this.glTexture);
-            }
+            };
                 
             this.unbind = function() {
                 $W.GL.bindTexture($W.GL.TEXTURE_2D, this.glTexture);
-            }
+            };
         },
 
         Canvas: function(name, src) {
@@ -1482,7 +1481,7 @@ $W = {
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
                 this.texture.unbind();
-            }
+            };
 
         },
 
@@ -1511,7 +1510,7 @@ $W = {
                 this.video.autobuffer = true;
                 this.video.play();
                 this.video.addEventListener("timeupdate", this.update, true);
-            }
+            };
 
             this.update = function() {
                 var gl = $W.GL;
@@ -1521,7 +1520,7 @@ $W = {
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
                 //gl.generateMipmap(gl.TEXTURE_2D);
                 //gl.bindTexture(gl.TEXTURE_2D, null); // clean up after ourselves
-            }
+            };
 
             this.setSource(src);
         },
@@ -1546,11 +1545,11 @@ $W = {
                 gl.bindTexture(gl.TEXTURE_2D, null); // clean up after ourselves
                 console.log('Done');
                 console.groupEnd();
-            }
+            };
 
             this.setSource = function(src) {
                 this.image.src = src;
-            }
+            };
 
             if (src !== undefined) {
                 this.setSource(src);
@@ -1623,7 +1622,7 @@ $W = {
             m[3][3] = 1;
             
             return $M(m);
-        }
+        };
 
         this.multiply = function(q) {
             var result = new $W.Quaternion();
@@ -1632,7 +1631,7 @@ $W = {
             result.y = this.w * q.y + this.y * q.w + this.z * q.x - this.x * q.z;
             result.z = this.w * q.z + this.z * q.w + this.x * q.y - this.y * q.x;
             return result;
-        }
+        };
     },
 
     /** @class Common state representation (position, rotation, scale).
@@ -1664,7 +1663,7 @@ $W = {
 
                 this.q = (qr.multiply(qp)).multiply(qh);
             }
-        }
+        };
         
         this.recalculateQuaternion();
 
@@ -1678,7 +1677,7 @@ $W = {
             }else {
                 this.position.elements = arguments[0];
             }
-        }
+        };
 
         /** Set a new rotation. */
         this.setRotation = function() { 
@@ -1692,12 +1691,12 @@ $W = {
             }
 
             this.recalculateQuaternion();
-        }
+        };
 
         /** Set a new scale. */
         this.setScale = function(x, y, z){ 
             this.scale.elements    = [x, y, z]; 
-        }
+        };
 
 
         this.equals = function(other) {
@@ -1713,7 +1712,7 @@ $W = {
             }else {
                 return false;
             }
-        }
+        };
     },
 
     /** @class Contains pertinent render information for an individual renderable entity.
@@ -1790,20 +1789,20 @@ $W = {
         this.setShaderProgram = function (program) {
             lastShaderProgram = this.shaderProgram;
             this.shaderProgram = program;
-        }
+        };
 
         this.revertShaderProgram = function(){
             var tmp = this.shaderProgram;
             this.shaderProgram = lastShaderProgram;
             lastShaderProgram = tmp;
-        }
+        };
 
         /** Add an object as a child to this object.
          * @param {Object} obj The object to add as a child.
          */
         this.addChild = function(obj) {
             this._children.push(obj);
-        }
+        };
 
         /** Set the indices for the elements of this object.
          * Draws this object with drawElements unless set with
@@ -1825,7 +1824,7 @@ $W = {
                 this._elementBuffer = $W.GL.createBuffer();
                 this._drawFunction = this._drawElements();
             }
-        }
+        };
 
         /** Fills the array of the given name, where name is a 
          * vertex attribute in the shader. 
@@ -1843,7 +1842,7 @@ $W = {
             if (this.buffers[name] === undefined) {
                 this.buffers[name] = $W.GL.createBuffer();
             }
-        }
+        };
 
         /** XXX Not working Buffers the data for this object once. */
         this.bufferArrays = function() {
@@ -1873,7 +1872,7 @@ $W = {
                         gl.STATIC_DRAW);
             }
 
-        }
+        };
 
         /** XXX Not working Binds the data buffers for rendering. */
         this.bindBuffers = function() {
@@ -1900,7 +1899,7 @@ $W = {
                 $W.GL.bindBuffer($W.GL.ELEMENT_ARRAY_BUFFER, this._elementBuffer);
             }
             //}}
-        }
+        };
 
         /** Buffer all the data stored in this object's attribute
          * arrays and set vertexAttribPointers for them.
@@ -1951,7 +1950,7 @@ $W = {
                 $W.GL.bufferData($W.GL.ELEMENT_ARRAY_BUFFER,new WebGLUnsignedShortArray(this._elements), 
                         $W.GL.STATIC_DRAW);
             }
-        }
+        };
 
 
         this.setTexture = function(texture, sampler) {
@@ -1965,7 +1964,7 @@ $W = {
                             $W.textures[obj.textures[0]].glTexture);
                         gl.uniform1i(this.location, 0);
                     });
-        }
+        };
 
 
         /** Bind the textures for this object.
@@ -1980,7 +1979,7 @@ $W = {
                 gl.bindTexture(gl.TEXTURE_2D, $W.textures[this.textures[i]].glTexture);
                 gl.uniform1i(gl.getUniformLocation($W.programs[this.shaderProgram].glProgram, 'sampler'), 0);
             }
-        }
+        };
 
 
         // XXX these are also clunky
@@ -1989,7 +1988,7 @@ $W = {
          */
         this.animatedPosition = function() { 
             return this.position.add(this.animation.position); 
-        }
+        };
 
         /** @returns {Vector} The sum of the object's base rotation and its 
          * animation. 
@@ -1997,7 +1996,7 @@ $W = {
         this.animatedRotation = function() { 
             //return this.rotation.add(this.animation.rotation); 
             return this.q.multiply(this.animation.q);
-        }
+        };
 
         /** @returns {Vector} The product of the object's base scale and its 
          * animation. 
@@ -2008,7 +2007,7 @@ $W = {
                 this.scale.e(3) * this.animation.scale.e(2),
                 this.scale.e(3) * this.animation.scale.e(3)
             ]);
-        }
+        };
 
         /** Set the x y and z components of the object's scale to the given
          * value.
@@ -2016,7 +2015,7 @@ $W = {
          */
         this.setScaleUniformly = function(s) { 
             this.scale = $V([s,s,s]); 
-        }
+        };
 
         // These allow us to do array or element drawing without
         // testing a boolean every frame
@@ -2028,7 +2027,7 @@ $W = {
                     console.error(e);
                 }
             });
-        }
+        };
 
         this._drawElements = function() {
             return (function() {
@@ -2039,7 +2038,7 @@ $W = {
                     console.error(e);
                 }
             });
-        }
+        };
 
         // drawArrays by default
         this._drawFunction = this._drawArrays();
@@ -2072,7 +2071,7 @@ $W = {
 
                 this._drawFunction();
                 $W.GL.bindTexture($W.GL.TEXTURE_2D, null);
-        }
+        };
 
         this.drawChildrenAt = function(pos, rot, scale) {
                 $W.modelview.pushMatrix();
@@ -2086,7 +2085,7 @@ $W = {
                 }
 
                 $W.modelview.popMatrix();
-        }
+        };
 
         /** draw this object at its internally stored position, rotation, and
          * scale, INCLUDING its current animation state.
@@ -2097,7 +2096,7 @@ $W = {
                 this.animatedRotation().matrix(),
                 this.animatedScale().elements
             );
-        }
+        };
 
         this.drawChildren = function() {
             this.drawChildrenAt(
@@ -2105,7 +2104,7 @@ $W = {
                 this.animatedRotation().matrix(),
                 this.animatedScale().elements
             );
-        }
+        };
 
         /** Update this object's animation state. 
          * @param {Number} dt The delta time since the previous call to
@@ -2117,7 +2116,7 @@ $W = {
             for (var i = 0; i < this._children.length; i++) {
                 this._children[i].update(dt);
             }
-        }
+        };
 
         //console.groupEnd();
     },
@@ -2148,12 +2147,12 @@ $W = {
          */
         this.setTarget = function(x, y, z) {
             this.target.elements = [x, y, z];
-        }
+        };
 
         /** Per frame update.
          * Replace as needed.
          */
-        this.update = function() {}
+        this.update = function() {};
     },
 
 
@@ -2181,14 +2180,14 @@ $W = {
             this.dt = this.t - this.pt;
             this.pt = this.t;
             this.age += this.dt;
-        }
+        };
 
         /** The time passed since this timer was started to the time of
          * the most recent tick in seconds.
          */
         this.ageInSeconds = function() {
             return this.age / 1000;
-        }
+        };
     },
 
     /** @class Provides an easy way to track FPS. */
@@ -2220,7 +2219,7 @@ $W = {
                 this.fps += this.recentFPS[i];
             }
             this.fps /= this.recentFPS.length;
-        }
+        };
     },
 
 
@@ -2255,7 +2254,7 @@ $W = {
              */
             this.getForUniform = function() {
                return new WebGLFloatArray(this.matrix.flatten());
-            }
+            };
 
 
             /** glPushMatrix
@@ -2270,7 +2269,7 @@ $W = {
                 } else {
                     this._matrixStack.push(this.matrix.dup());
                 }
-            }
+            };
 
             /** glPopMatrix
              * (c) 2009 Vladimir Vukicevic
@@ -2281,7 +2280,7 @@ $W = {
                 }
                 this.matrix = this._matrixStack.pop();
                 return this.matrix;
-            }
+            };
 
             /** glMultMatrix
              * (c) 2009 Vladimir Vukicevic
@@ -2289,7 +2288,7 @@ $W = {
              */
             this.multMatrix = function (m) {
                 this.matrix = this.matrix.x(m);
-            }
+            };
 
             /** glTranslate
              * (c) 2009 Vladimir Vukicevic
@@ -2298,7 +2297,7 @@ $W = {
             this.translate = function (v) {
                 var m = Matrix.Translation($V([v[0],v[1],v[2]])).ensure4x4();
                 this.multMatrix(m);
-            }
+            };
 
             /** glRotate
              * (c) 2009 Vladimir Vukicevic
@@ -2309,7 +2308,7 @@ $W = {
                 var arad = ang * Math.PI / 180.0;
                 var m = Matrix.Rotation(arad, $V([v[0], v[1], v[2]])).ensure4x4();
                 this.multMatrix(m);
-            }
+            };
 
             /** glScale
              * (c) 2009 Vladimir Vukicevic
@@ -2318,21 +2317,21 @@ $W = {
             this.scale = function (v) {
                 var m = Matrix.Diagonal([v[0], v[1], v[2], 1]);
                 this.multMatrix(m);
-            }
+            };
 
             /** invert
              * (c) 2009 Vladimir Vukicevic
              */
             this.invert = function () {
                 this.matrix = this.matrix.inv();
-            }
+            };
 
             /** glLoadIdentity
              * (c) 2009 Vladimir Vukicevic
              */
             this.loadIdentity = function () {
                 this.matrix = Matrix.I(4);
-            }
+            };
         },
 
         //----------------------------
@@ -2419,7 +2418,7 @@ $W = {
     },
 
     /** 
-     * Initialize the WebGLU system, optionally initizlizing the WebGL
+     * Initialize the WebGLU system, optionally initializing the WebGL
      * subsystem.
      * canvasNode - the DOM node of a canvas element to init WebGL,
      *              defaults to using the DOM element with ID 'canvas'.
@@ -2506,7 +2505,7 @@ $W = {
         console.groupCollapsed = console.oldGroupCollapsed;
     },
 
-    /** Setup the WebGL subsytem.
+    /** Setup the WebGL subsystem.
      * Create a WebGL context on the given canvas.
      *
      * XXX Can't yet handle multiple canvii
@@ -2628,7 +2627,7 @@ $W = {
 		// clearing the color buffer is really slow
 		$W.GL.clear($W.GL.COLOR_BUFFER_BIT|$W.GL.DEPTH_BUFFER_BIT);
 	}
-}
+};
 
 // Utility functions
 
@@ -2643,7 +2642,7 @@ $W.extendArray = function() {
             }
         }
         return null;
-    }
+    };
 
     Array.prototype.flatten = function() {
         var res = [];
@@ -2655,7 +2654,7 @@ $W.extendArray = function() {
             res = this;
         }
         return res;
-    }
+    };
 
     Array.prototype.remove = function(item) {
         var res = [];
@@ -2675,7 +2674,7 @@ $W.extendArray = function() {
         }
 
         return res;
-    }
+    };
     // returns the index into this array of
     // if it's an array of arrays it assumes the
     // item in the first index of each subarry
@@ -2694,8 +2693,8 @@ $W.extendArray = function() {
         }
 
         return undefined;
-    }
-}
+    };
+};
 
 
 /* Calculate normals at each vertex in vertices, by looking
@@ -2733,7 +2732,7 @@ $W.util.calculateNormals = function(vertices, faces) {
         }
 
     }else { // handle flattened arrays
-        nvecs = new Array(vertices.length / 3)
+        nvecs = new Array(vertices.length / 3);
 
         for (var i = 0; i < faces.length; i+=3) {
             var j0 = faces[i+0];
@@ -2779,7 +2778,7 @@ $W.util.calculateNormals = function(vertices, faces) {
     }
 
     return normals;
-}
+};
 
 
 //--------------------------------------------------------------------------
@@ -2789,8 +2788,7 @@ $W.util.calculateNormals = function(vertices, faces) {
 $W.loadSylvester = function() {
     $W.util.include($W.paths.external + $W.paths.sylvester);
 
-    Matrix.Translation = function (v)
-    {
+    Matrix.Translation = function (v) {
         if (v.elements.length == 2) {
             var r = Matrix.I(3);
             r.elements[2][0] = v.elements[0];
@@ -2807,15 +2805,14 @@ $W.loadSylvester = function() {
         }
 
         throw "Invalid length for Translation";
-    }
+    };
 
 
     Matrix.prototype.trace = function() {
         return this[0][0] + this[1][1] + this[2][2];
-    }
+    };
 
-    Matrix.prototype.flatten = function ()
-    {
+    Matrix.prototype.flatten = function () {
         var result = [];
         if (this.elements.length === 0) {
             return [];
@@ -2828,10 +2825,9 @@ $W.loadSylvester = function() {
             }
         }
         return result;
-    }
+    };
 
-    Matrix.prototype.ensure4x4 = function()
-    {
+    Matrix.prototype.ensure4x4 = function() {
         if (this.elements.length == 4 && 
                 this.elements[0].length == 4) {
             return this;
@@ -2867,8 +2863,7 @@ $W.loadSylvester = function() {
         return this;
     };
 
-    Matrix.prototype.make3x3 = function()
-    {
+    Matrix.prototype.make3x3 = function() {
         if (this.elements.length != 4 ||
                 this.elements[0].length != 4) {
             return null;
@@ -2879,8 +2874,7 @@ $W.loadSylvester = function() {
                 [this.elements[2][0], this.elements[2][1], this.elements[2][2]]]);
     };
 
-    Vector.prototype.flatten = function ()
-    {
+    Vector.prototype.flatten = function(){
         return this.elements;
     }; 
 
@@ -2888,6 +2882,5 @@ $W.loadSylvester = function() {
 
     Vector.prototype.invert = function() {
         return Vector.prototype.vec3Zero.subtract(this);
-    }
-}
-
+    };
+};
